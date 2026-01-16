@@ -5,7 +5,7 @@ import sys
 from methods import print_error
 
 
-libname = "EXTENSION-NAME"
+libname = "SLIME-VR-INTERFACE"
 projectdir = "demo"
 
 localEnv = Environment(tools=["default"], PLATFORM="")

@@ -48,11 +48,20 @@ compile_commands.json
 
 # Other stuff
 *.log
+out
+x64
+extension_api.json
+/bin
 
 # VSCode
 .vscode/*
 !.vscode/extensions.json
 .DS_Store
+.vs
+*.slnx
+*.filters
+*.vcxproj*
+*.dir
 
 # Jetbrains
 .idea/
@@ -60,3 +69,6 @@ compile_commands.json
 # Cmake
 cmake-build*
 CMakeUserPresets.json
+CMakeFiles
+CMakeCache.txt
+cmake_install.cmake
