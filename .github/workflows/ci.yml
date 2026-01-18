@@ -70,4 +70,5 @@ jobs:
       - name: Build GDExtension Debug Build
         shell: sh
         run: |
+          cmake .
           cmake --build .
