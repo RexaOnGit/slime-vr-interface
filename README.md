@@ -1,56 +1,63 @@
-# godot-cpp template
-This repository serves as a quickstart template for GDExtension development with Godot 4.0+.
+# slime-vr-interface
+This repository provides a Godot plugin for interfacing with the SlimeVR Server. It uses the SolarXR Protocol to communicate directly with the server. The source is writen in C++ via godot-cpp (the C++ library for GDExtension).
 
 ## Contents
-* Preconfigured source files for C++ development of the GDExtension ([src/](./src/))
-* An empty Godot project in [demo/](./demo), to test the GDExtension
+* slime-vr-interface source files ([src/](./src/))
+* A demo godot project showcasing basic usage of the plugin [demo/](./demo), or to test that the plugin works.
 * godot-cpp as a submodule (`godot-cpp/`)
+* SolarXR-Protocol as a submodule (`SolarXR-Protocol/`)
+* IXWebSocket as a submodule (`IXWebSocket/`)
 * GitHub Issues template ([.github/ISSUE_TEMPLATE.yml](./.github/ISSUE_TEMPLATE.yml))
-* GitHub CI/CD workflows to publish your library packages when creating a release ([.github/workflows/builds.yml](./.github/workflows/builds.yml))
-* An SConstruct file with various functions, such as boilerplate for [Adding documentation](https://docs.godotengine.org/en/stable/tutorials/scripting/cpp/gdextension_docs_system.html)
 
-## Usage - Template
+## Using the plugin
 
-To use this template, log in to GitHub and click the green "Use this template" button at the top of the repository page. This will let you create a copy of this repository with a clean git history.
+### Adding the plugin to your Godot project
+todo: write plugin setup instructions
 
-To get started with your new GDExtension, do the following:
+### Demo project example
+todo: write demo example
 
-* clone your repository to your local computer
-* initialize the godot-cpp git submodule via `git submodule update --init`
-* change the name of the compiled library file inside the [SConstruct](./SConstruct) file by modifying the `libname` string.
-  * change the paths of the to be loaded library name inside the [demo/bin/example.gdextension](./demo/bin/example.gdextension) file, by replacing `SLIME-VR-INTERFACE` with the name you chose for `libname`.
-* change the `entry_symbol` string inside [demo/bin/example.gdextension](./demo/bin/example.gdextension) file.
-  * rename the `example_library_init` function in [src/register_types.cpp](./src/register_types.cpp) to the same name you chose for `entry_symbol`.
-* change the name of the `demo/bin/example.gdextension` file
+## Contributing
+If you would like to contribute to the slime-vr-interface plugin, you must clone the respository to you local computer. See the following sections for details on how to set up the project for building and developing.
 
-Now, you can build the project with the following command:
+### Building
 
+#### Cmake
+todo: write build instructions
 ```shell
-scons
+# tbd
 ```
 
-If the build command worked, you can test it with the [demo](./demo) project. Import it into Godot, open it, and launch the main scene. You should see it print the following line in the console:
+If the build command worked, you can test it with the [demo](./demo) project. 
+* import [demo/project.godot](./demo/project.godot) into Godot and open it
+* make sure SlimeVR Server is running
+* launch the main scene
+> **NOTE:** The demo requires SlimeVR Server to successfully run.
 
+You should see it print the following line in the console:
 ```
-Type: 24
+expected console output here
 ```
 
 ### Configuring an IDE
-You can develop your own extension with any text editor and by invoking scons on the command line, but if you want to work with an IDE (Integrated Development Environment), you can use a compilation database file called `compile_commands.json`. Most IDEs should automatically identify this file, and self-configure appropriately.
-To generate the database file, you can run one of the following commands in the project root directory:
-```shell
-# Generate compile_commands.json while compiling
-scons compiledb=yes
 
-# Generate compile_commands.json without compiling
-scons compiledb=yes compile_commands.json
+#### Visual Studio 2026
+todo: write ide config instructions
+```shell
+# tbd
 ```
 
-## Usage - Actions
+### SlimeVR Tracking Demo
+todo: write demo instructions
 
-This repository comes with continuous integration (CI) through a GitHub action that tests building the GDExtension.
-It triggers automatically for each pushed change. You can find and edit it in [builds.yml](.github/workflows/ci.yml).
+## Credits
+Thanks to the following for their work and assistance. This project would not be possible without them!
+* **SlimeVR**
+	* SlimeVR Server, SolarXR Protocol, Hardware for testing
+* **SlimeVR Community**
+	* Coding and debug assitance
+* **Godot Founation**
+	* Godot Engine and GDExtension
 
-There is also a workflow ([make_build.yml](.github/workflows/make_build.yml)) that builds the GDExtension for all supported platforms that you can use to create releases.
-You can trigger this workflow manually from the `Actions` tab on GitHub.
-After it is complete, you can find the file `godot-cpp-template.zip` in the `Artifacts` section of the workflow run.
+<https://slimevr.dev/>
+<https://godotengine.org/license/>
