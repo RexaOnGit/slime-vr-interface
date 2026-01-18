@@ -1,6 +1,9 @@
 extends Node
 
+var Interface := SlimeVRInterface.new()
 
 func _ready() -> void:
-	var example := ExampleClass.new()
-	example.print_type(example)
+	
+	
+	Interface.start()
+	

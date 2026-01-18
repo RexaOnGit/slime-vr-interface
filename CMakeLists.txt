@@ -43,6 +43,16 @@ project(godot-cpp-template
     LANGUAGES CXX
 )
 
+# Add flatbuffers
+set(FLATBUFFERS_BUILD_TESTS OFF CACHE INTERNAL "")
+set(FLATBUFFERS_INSTALL OFF CACHE INTERNAL "")
+set(FLATBUFFERS_BUILD_FLATC ON CACHE INTERNAL "") # We want the compiler!
+add_subdirectory(SolarXR-Protocol/lib/flatbuffers EXCLUDE_FROM_ALL)
+
+# Add IXWebSocket
+set(USE_ZLIB OFF CACHE BOOL "Enable zlib for IXWebSocket" FORCE)
+add_subdirectory(IXWebSocket)
+
 add_library(${LIBNAME} SHARED)
 
 target_sources(${LIBNAME}
@@ -51,7 +61,12 @@ target_sources(${LIBNAME}
     src/register_types.h
     src/example_class.cpp
     src/example_class.h
+    src/SlimeVRInterface.cpp
+    src/SlimeVRInterface.h
 )
+
+target_include_directories(${LIBNAME} PUBLIC "SolarXR-Protocol/protocol/cpp/include")
+target_link_libraries(${LIBNAME} PUBLIC flatbuffers ixwebsocket)
 
 # Fetch a list of the xml files to use for documentation and add to our target
 file(GLOB_RECURSE DOC_XML LIST_DIRECTORIES NO CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/doc_classes/*.xml")
