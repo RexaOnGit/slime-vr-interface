@@ -8,3 +8,5 @@
 [submodule "IXWebSocket"]
 	path = IXWebSocket
 	url = https://github.com/machinezone/IXWebSocket.git
+[submodule ".\\SolarXR-Protocol\\"]
+	url = https://github.com/RexaOnGit/SolarXR-Protocol.git
