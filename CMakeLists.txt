@@ -63,6 +63,7 @@ target_sources(${LIBNAME}
     src/example_class.h
     src/SlimeVRInterface.cpp
     src/SlimeVRInterface.h
+    src/BoneData.h
 )
 
 target_include_directories(${LIBNAME} PUBLIC "SolarXR-Protocol/protocol/cpp/include")

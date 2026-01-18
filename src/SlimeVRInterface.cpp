@@ -1,20 +1,22 @@
 #include "SlimeVRInterface.h"
+#include <godot_cpp/variant/typed_dictionary.hpp>
 #include <flatbuffers/flatbuffers.h>
 #include <ixwebsocket/IXUserAgent.h>
 #include <ixwebsocket/IXWebSocket.h>
 #include <solarxr_protocol/generated/all_generated.h>
 #include <any>
+#include "BoneData.h"
 
 namespace tracker = solarxr_protocol::data_feed::tracker;
 namespace device = solarxr_protocol::data_feed::device_data;
 namespace data_feed = solarxr_protocol::data_feed;
+namespace math = solarxr_protocol::datatypes::math;
 
 static constexpr uint16_t updateRate = 200;
 
 void SlimeVRInterface::_bind_methods() {
-	//godot::ClassDB::bind_method(D_METHOD("print_type", "variant"), &SlimeVRInterface::print_type);
-
 	godot::ClassDB::bind_method(D_METHOD("start"), &SlimeVRInterface::start);
+	ADD_SIGNAL(MethodInfo("skeleton_data_updated"));
 }
 
 void SlimeVRInterface::start() {
@@ -25,18 +27,22 @@ void SlimeVRInterface::start() {
 
 	webSocket.setOnMessageCallback([this](const ix::WebSocketMessagePtr &msg) {
 		if (msg->type == ix::WebSocketMessageType::Message) {
-			log("received message: " + std::to_string(msg->str.size()));
+			//proccess the recieved message
+			log("[Interface] Received message: " + std::to_string(msg->str.size()));
+			//only proccess the message if it is binary
 			if (msg->binary) {
 				processMessage(msg->str);
 			}
 		} else if (msg->type == ix::WebSocketMessageType::Open) {
-			log("Connection established");
+			//request data when connection is successful
+			log("[Interface] Connection established");
 			subscribeToDataFeed();
 		} else if (msg->type == ix::WebSocketMessageType::Error) {
 			// Maybe SSL is not configured properly
 			log("Connection error: " + msg->errorInfo.reason);
 		} else {
-			log("[Interface] Message Type" + std::to_string((int)msg->type));
+			//indicate an unexpected message type
+			log("[Interface] Unexpected message Type: " + std::to_string((int)msg->type));
 		}
 	});
 
@@ -104,7 +110,7 @@ void SlimeVRInterface::processMessage(std::string raw) {
 			//look for bone information in the message
 			auto bones = update->bones();
 			if (bones != nullptr) {
-				std::map<std::string, std::map<std::string, std::any>> skeletonData;
+				godot::TypedDictionary<godot::String, BoneData> skeletonData;
 				for (auto b = 0; b < bones->size(); ++b) {
 					auto bone = bones->Get(b);
 					if (bone == nullptr) {
@@ -116,17 +122,18 @@ void SlimeVRInterface::processMessage(std::string raw) {
 					}
 
 					//place collected data into a variable
-					auto boneName = (std::string)(char *)bone->body_part();
-					auto headPosition = bone->head_position_g();
-					auto headRotation = bone->rotation_g();
+					auto boneName = std::string(EnumNameBodyPart(bone->body_part()));
+					auto headPosition = *bone->head_position_g();
+					auto headRotation = *bone->rotation_g();
 					auto boneLength = bone->bone_length();
-					std::map<std::string, std::any> boneData = {
-						{ "HeadPosition", headPosition },
-						{ "HeadRotation", headRotation },
-						{ "Length", boneLength }
-					};
-					skeletonData.insert({ boneName, boneData });
+					BoneData boneData{ headPosition, headRotation, boneLength };
+					skeletonData.set(godot::String(boneName.c_str()), &boneData);
 				}
+
+				//transmit the new skeletonData
+				emit_signal("skeleton_data_updated", skeletonData);
+			} else {
+				log("[Interface] Bone data not found");
 			}
 		}
 	}

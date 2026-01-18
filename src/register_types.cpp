@@ -6,6 +6,7 @@
 #include <godot_cpp/godot.hpp>
 
 #include "SlimeVRInterface.h"
+#include "BoneData.h"
 #include <ixwebsocket/IXNetSystem.h>
 
 using namespace godot;
@@ -17,6 +18,7 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level)
 		return;
 	}
 	GDREGISTER_CLASS(SlimeVRInterface);
+	GDREGISTER_CLASS(BoneData);
 }
 
 void uninitialize_gdextension_types(ModuleInitializationLevel p_level) {
