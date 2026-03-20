@@ -6,6 +6,10 @@
 #include <solarxr_protocol/generated/all_generated.h>
 #include <any>
 #include "BoneData.h"
+#include "godot_cpp/classes/gltf_state.hpp"
+#include "SkeletonUpdater.h"
+#include "AvatarImporter.h"
+#include "GodotUtilities.h"
 
 namespace tracker = solarxr_protocol::data_feed::tracker;
 namespace device = solarxr_protocol::data_feed::device_data;
@@ -16,6 +20,11 @@ static constexpr uint16_t updateRate = 200;
 
 void SlimeVRInterface::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("start"), &SlimeVRInterface::start);
+	godot::ClassDB::bind_method(
+		D_METHOD("getAvatarResourcePath"), &SlimeVRInterface::getAvatarResourcePath);
+	godot::ClassDB::bind_method(
+		D_METHOD("setAvatarResourcePath"), &SlimeVRInterface::setAvatarResourcePath);
+	godot::ClassDB::bind_method(D_METHOD("avatarInit"), &SlimeVRInterface::avatarInit);
 	ADD_SIGNAL(MethodInfo("skeleton_data_updated"));
 }
 
@@ -48,7 +57,21 @@ void SlimeVRInterface::start() {
 
 	webSocket.start();
 
-	//fire a signal when websocket is ready?
+	//Fire a signal when websocket is ready?
+}
+
+//Create an instance of an avatar node loaded from _avatarResourcePath and add it as a child of targetNode
+void SlimeVRInterface::avatarInit(Node *targetNode) {
+	AvatarImporter::loadAvatar(_avatarResourcePath, _avatarNode);
+
+	//Attach a skeletonUpdater to the avatar node.
+	//It will allow the interface to drive the avatar.
+	SkeletonUpdater *skeletonUpdater = memnew(SkeletonUpdater);
+	connect("skeleton_data_updated", Callable(skeletonUpdater, "_on_skeleton_data_updated"));
+	_avatarNode->find_child("Skeleton3D")->add_child(skeletonUpdater);
+
+	//Add the avatar to the target.
+	targetNode->add_child(_avatarNode);
 }
 
 void SlimeVRInterface::log(std::string str) {

@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://b6qduglw10ei4"]
+
+[ext_resource type="PackedScene" uid="uid://chh4g3tv4gb8o" path="res://assets/avatar_glbs/avatar_sample_b/AvatarSample_B.glb" id="1_gb0am"]
+
+[node name="AvatarSample_B" instance=ExtResource("1_gb0am")]

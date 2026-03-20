@@ -52,6 +52,7 @@ out
 x64
 extension_api.json
 /bin
+demo/assets/avatar_glbs
 
 # VSCode
 .vscode/*

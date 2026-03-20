@@ -36,10 +36,10 @@ get_target_property(GODOTCPP_SUFFIX godot::cpp GODOTCPP_SUFFIX)
 get_target_property(GODOTCPP_PLATFORM godot::cpp GODOTCPP_PLATFORM)
 
 # Now we can specify our own project which will inherit any global cmake properties or variables that have been defined.
-project(godot-cpp-template
+project(slime-vr-interface
     VERSION 1.0
-    DESCRIPTION "This repository serves as a quickstart template for GDExtension development with Godot 4.0+."
-    HOMEPAGE_URL "https://github.com/enetheru/godot-cpp-template/tree/main"
+    DESCRIPTION "This repository provides a Godot plugin for interfacing with the SlimeVR Server."
+    HOMEPAGE_URL "https://github.com/AmberStormbright/slime-vr-interface"
     LANGUAGES CXX
 )
 
@@ -64,6 +64,9 @@ target_sources(${LIBNAME}
     src/SlimeVRInterface.cpp
     src/SlimeVRInterface.h
     src/BoneData.h
+    src/SkeletonUpdater.h
+    src/GodotUtilities.h
+    src/AvatarImporter.h
 )
 
 target_include_directories(${LIBNAME} PUBLIC "SolarXR-Protocol/protocol/cpp/include")
